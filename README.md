@@ -14,3 +14,14 @@ Spoor is the data collection pipeline for FT.com.
 `curl -i localhost:5101/adsf?data=1`
 
 Will write a file containing '1' to s3. 
+
+# Theory
+
+`spoor api -> s3 -> sqs (raw) -> decorators -> sqs (decorated) -> redshift | keen.io | bettsy etc.`
+
+- Spoor receives event data.
+- Archived on s3.
+- Pushed to a queue.
+- Decorated by additional API (session API, CAPI etc.).
+- Pushed to another queue.
+- Consumed by anyone who wants it.
