@@ -23,7 +23,7 @@ function px(req, res){
 
 var server = http.createServer(px);
 
-// flush the data to s3
+// flush the data to s3 asynchronously to the request response
 server.on('request', function (request, socket, head) {
 	
 	var q = qs.parse(url.parse(request.url).query);
