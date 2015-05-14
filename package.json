@@ -1,5 +1,5 @@
 {
-  "name": "ngda-api",
+  "name": "spoor-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Financial-Times/ngda-api.git"
+    "url": "https://github.com/Financial-Times/spoor-api.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Financial-Times/ngda-api/issues"
+    "url": "https://github.com/Financial-Times/spoor-api/issues"
   },
-  "homepage": "https://github.com/Financial-Times/ngda-api",
+  "homepage": "https://github.com/Financial-Times/spoor-api",
   "dependencies": {
     "aws-sdk": "^2.1.27",
     "forever": "^0.14.1",
