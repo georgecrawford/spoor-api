@@ -1,6 +1,5 @@
 
 var http 	= require('http');
-var event 	= require('events').EventEmitter;
 var AWS		= require('aws-sdk'); 
 var url		= require('url');
 var qs		= require('querystring');
