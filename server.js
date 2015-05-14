@@ -5,12 +5,16 @@ var AWS		= require('aws-sdk');
 var url		= require('url');
 var qs		= require('querystring');
 var uuid	= require('node-uuid');
-var moment  = require('moment');
+var moment  	= require('moment');
 
 const gif	= new Buffer('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64');
 const PORT	= process.env.PORT || 5101; 
 
-AWS.config.update({accessKeyId: process.env.accessKey, secretAccessKey: process.env.secretAccessKey, "region": "eu-west-1"});
+AWS.config.update({
+	accessKeyId: process.env.accessKey, 
+	secretAccessKey: process.env.secretAccessKey, 
+	"region": "eu-west-1"
+});
 
 var s3 = new AWS.S3(); 
 
