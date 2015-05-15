@@ -11,6 +11,6 @@ Spoor is the data collection pipeline for FT.com.
 
 `make run`
 
-`curl -i localhost:5101/adsf?data=1`
+`curl -i localhost:5101/foo?data=1`
 
-Will write a file containing '1' to s3. 
+Will write a file containing '1' to S3 (archive) and our Kinesis stream.
