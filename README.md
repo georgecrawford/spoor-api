@@ -14,3 +14,32 @@ Spoor is the data collection pipeline for FT.com.
 `curl -i localhost:5101/foo?data=1`
 
 Will write a file containing '1' to S3 (archive) and our Kinesis stream.
+
+# Theory
+
+```
+                                            +------------------+           
+                                      +---> |   s3 (archive)   |           
+                                      |     +------------------+           
++----------+      +-------------+     |                                  
+|  client  | +--> |  spoor api  | +-> |       
++----------+      +-------------+     |                                  
+                                      |     +------------------+         
+                                      +-->  | kinesis (ingest) |         
+                                            +------------------+         
+```
+
+## Collection
+
+- Spoor receives event data.
+- Archived on s3.
+- Pushed to a Kenesis queue.
+
+## Decoration
+
+- Then we decorated by additional API (session API, CAPI etc.).
+- Pushed to another queue.
+- Consumed by anyone who wants it.
+
+The main consumer will be RedShift.
+
