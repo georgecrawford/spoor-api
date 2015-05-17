@@ -18,15 +18,17 @@ Will write a file containing '1' to S3 (archive) and our Kinesis stream.
 # Theory
 
 ```
-                                            +------------------+           
-                                      +---> |   s3 (archive)   |           
-                                      |     +------------------+           
-+----------+      +-------------+     |                                  
-|  client  | +--> |  spoor api  | +-> |       
-+----------+      +-------------+     |                                  
-                                      |     +------------------+         
-                                      +-->  | kinesis (ingest) |         
-                                            +------------------+         
+                                             +------------------+           
+                                      +--->  |   s3 (archive)   |           
+                                      |      +------------------+
+                                      |     
++----------+      +-------------+     |      +------------------+    
+|  client  | +--> |  spoor api  | +-> | -->  | kinesis (ingest) |       
++----------+      +-------------+     |      +------------------+                           
+                                      |   
+                                      |      +------------------+           
+                                      +--->  |       sqs        |           
+                                             +------------------+
 ```
 
 ## Collection
@@ -34,6 +36,7 @@ Will write a file containing '1' to S3 (archive) and our Kinesis stream.
 - Spoor receives event data.
 - Archived on s3.
 - Pushed to a Kenesis queue.
+- Pushed to an SQS queue.
 
 ## Decoration
 

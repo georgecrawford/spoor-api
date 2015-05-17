@@ -17,10 +17,12 @@ AWS.config.update({
 
 var s3 = new AWS.S3(); 
 var kinesis = new AWS.Kinesis();
+var sqs = new AWS.SQS();
+var sqsUrl = process.env.SQS_URL;
 
 // http response 
 function px(req, res){
-	// FIXME content-type header
+	res.setHeader('Content-Type', 'image/gif');
 	res.end(gif);
 }
 
@@ -46,7 +48,7 @@ server.on('request', function (request, socket, head) {
 server.on('request', function (request, socket, head) {
 	
 	var q = qs.parse(url.parse(request.url).query);
-	console.log('writing key to spoor');
+	console.log('writing key to kinesis');
 
 	// write to kinesis
 	kinesis.putRecord({
@@ -55,6 +57,21 @@ server.on('request', function (request, socket, head) {
 		console.log(err, data);
 	});
 })
+
+// flush the data to SQS  
+server.on('request', function (request, socket, head) {
+	
+	var q = qs.parse(url.parse(request.url).query);
+	console.log('writing key to sqs');
+
+	// write to kinesis
+	sqs.sendMessage({
+		QueueUrl: sqsUrl, MessageBody: JSON.stringify(q.data || new Date())
+	}, function(err, data) {
+		console.log(err, data);
+	});
+})
+
 
 server.listen(PORT, function(){
     console.log("Server listening on: http://localhost:%s", PORT);
