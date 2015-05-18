@@ -1,26 +1,14 @@
 
-var http 	= require('http');
-var AWS		= require('aws-sdk'); 
-var url		= require('url');
-var qs		= require('querystring');
-var uuid	= require('node-uuid');
-var moment 	= require('moment');
+var http			= require('http');
+var EventEmitter	= require('events').EventEmitter;
+var Event			= require('./models/event');
+var sinks			= require('./sinks');
 
-const gif	= new Buffer('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64');
-const PORT	= process.env.PORT || 5101; 
+const gif		= new Buffer('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64');
+const PORT		= process.env.PORT || 5101; 
+const emitter	= new EventEmitter();
 
-AWS.config.update({
-	accessKeyId: process.env.accessKey, 
-	secretAccessKey: process.env.secretAccessKey, 
-	"region": "eu-west-1"
-});
-
-var s3 = new AWS.S3(); 
-var kinesis = new AWS.Kinesis();
-var sqs = new AWS.SQS();
-var sqsUrl = process.env.SQS_URL;
-
-// http response 
+// HTTP response 
 function px(req, res){
 	res.setHeader('Content-Type', 'image/gif');
 	res.end(gif);
@@ -28,50 +16,18 @@ function px(req, res){
 
 var server = http.createServer(px);
 
+// Create an 'event' from the incoming HTTP request
 server.on('request', function (request, socket, head) {
-	
-	var q = qs.parse(url.parse(request.url).query);
-	var key = moment().format('YYYY/MM/DD/HH') + uuid.v4();
+	var event = new Event({});
+	event.envelope('headers', request.headers);
+	emitter.emit('request', event);
+});
 
-	console.log('writing key: ', key);
-
-	// write to s3
-	s3.putObject({
-		Bucket: 'ngda', Key: key, Body: JSON.stringify(q.data)
-	}, function(err, data) {
-		console.log(err, data);
-	});
-})
-
-
-// flush the data to kinesis asynchronously to the request response
-server.on('request', function (request, socket, head) {
-	
-	var q = qs.parse(url.parse(request.url).query);
-	console.log('writing key to kinesis');
-
-	// write to kinesis
-	kinesis.putRecord({
-		StreamName: 'spoor-ingest', PartitionKey: "event", Data: JSON.stringify(q.data || new Date())
-	}, function(err, data) {
-		console.log(err, data);
-	});
-})
-
-// flush the data to SQS  
-server.on('request', function (request, socket, head) {
-	
-	var q = qs.parse(url.parse(request.url).query);
-	console.log('writing key to sqs');
-
-	// write to kinesis
-	sqs.sendMessage({
-		QueueUrl: sqsUrl, MessageBody: JSON.stringify(q.data || new Date())
-	}, function(err, data) {
-		console.log(err, data);
-	});
-})
-
+// Thing listening to the 'request' event
+emitter.on('request', sinks.stdout); 
+emitter.on('request', sinks.s3); 
+emitter.on('request', sinks.kinesis); 
+emitter.on('request', sinks.sqs); 
 
 server.listen(PORT, function(){
     console.log("Server listening on: http://localhost:%s", PORT);
