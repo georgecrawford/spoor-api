@@ -11,6 +11,7 @@ const emitter	= new EventEmitter();
 // HTTP response 
 function px(req, res){
 	res.setHeader('Content-Type', 'image/gif');
+	res.setHeader('Cache-Control', 'no-cache, no-store');
 	res.end(gif);
 }
 
