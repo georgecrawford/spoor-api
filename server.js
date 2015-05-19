@@ -19,6 +19,9 @@ var server = http.createServer(px);
 
 // Create an 'event' from the incoming HTTP request
 server.on('request', function (request, socket, head) {
+	
+	if (request.url !== '/px.gif') return;
+
 	var event = new Event({});
 	event.envelope('headers', request.headers);
 	emitter.emit('request', event);
