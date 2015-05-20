@@ -3,21 +3,7 @@ var http			= require('http');
 var EventEmitter	= require('events').EventEmitter;
 var Event			= require('./models/event');
 var sinks			= require('./sinks');
-var util 			= require('util');
-
-var StatsD = require('node-statsd'),
-    client = new StatsD({ 
-		host: 'statsd.hostedgraphite.com', 
-		port: 8125
-	});
-
-// Derive the keys based on the platform, Eg, <platform>.<application>.<instance>.<metric>
-var prefix = process.env.HOSTEDGRAPHITE_APIKEY;
-var platform = (process.env.DYNO) ? 'heroku' : 'localhost';
-var instance = (platform === 'heroku') ? process.env.DYNO.replace('.', '_') : '_';
-var app = 'spoor-api';
-
-var key = util.format('%s.%s.%s.%s.', prefix, platform, app, instance);
+var statsd			= require('./lib/statsd');
 
 const gif		= new Buffer('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64');
 const PORT		= process.env.PORT || 5101; 
@@ -37,7 +23,7 @@ server.on('request', function (request, socket, head) {
 
 	if (request.url !== '/px.gif') return;
 
-	client.increment(key + 'request.px', 1);
+	statsd.increment('request.px', 1);
 
 	var event = new Event({});
 	event.envelope('headers', request.headers);
