@@ -5,6 +5,8 @@ var Event			= require('./models/event');
 var sinks			= require('./sinks');
 var statsd			= require('./lib/statsd');
 
+require('./lib/sqsAttributes');
+
 const gif		= new Buffer('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64');
 const PORT		= process.env.PORT || 5101; 
 const emitter	= new EventEmitter();
