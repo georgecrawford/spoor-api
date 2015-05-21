@@ -5,7 +5,8 @@ var Event			= require('./models/event');
 var sinks			= require('./sinks');
 var statsd			= require('./lib/statsd');
 
-require('./lib/sqsAttributes');
+require('./lib/metrics/sqsAttributes');
+require('./lib/metrics/cloudwatch');
 
 const gif		= new Buffer('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64');
 const PORT		= process.env.PORT || 5101; 
