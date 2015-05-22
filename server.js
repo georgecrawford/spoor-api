@@ -4,22 +4,15 @@ var EventEmitter	= require('events').EventEmitter;
 var Event			= require('./models/event');
 var sinks			= require('./sinks');
 var statsd			= require('./lib/statsd');
+var response		= require('./lib/response');
 
 require('./lib/metrics/sqsAttributes');
 require('./lib/metrics/cloudwatch');
 
-const gif		= new Buffer('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64');
 const PORT		= process.env.PORT || 5101; 
 const emitter	= new EventEmitter();
 
-// HTTP response 
-function px(req, res){
-	res.setHeader('Content-Type', 'image/gif');
-	res.setHeader('Cache-Control', 'no-cache, max-age=0');
-	res.end(gif);
-}
-
-var server = http.createServer(px);
+var server = http.createServer(response);
 
 // Create an 'event' from the incoming HTTP request
 server.on('request', function (request, socket, head) {
