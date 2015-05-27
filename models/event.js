@@ -16,7 +16,7 @@ var Event = function (req) {
 		envelope: {
 			headers: req.headers || {}
 		},
-		message: req.payload || {}
+		message: req.payload.toString() || {}
 	}
 	
 	this.message.envelope.url = url.parse(req.url);
