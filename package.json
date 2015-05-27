@@ -18,11 +18,15 @@
   "homepage": "https://github.com/Financial-Times/spoor-api",
   "dependencies": {
     "aws-sdk": "^2.1.27",
+    "chai": "^2.3.0",
+    "connect": "^3.3.5",
     "es6-promise": "^2.0.1",
     "forever": "^0.14.1",
     "haikro": "^1.14.1",
+    "mocha": "^2.2.5",
     "moment": "^2.10.3",
     "node-statsd": "^0.1.1",
-    "node-uuid": "^1.4.3"
+    "node-uuid": "^1.4.3",
+    "raw-body": "^2.0.2"
   }
 }

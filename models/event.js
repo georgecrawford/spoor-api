@@ -1,19 +1,22 @@
 
-var Event = function (options) {
+var url = require('url');
 
-	this.options = options;
-	this.time = {
+var Event = function (req) {
+
+	this.message = {
+		envelope: {
+			headers: req.headers || {}
+		},
+		message: req.payload ? req.payload.toString() : {}
+	}
+	
+	this.message.envelope.url = url.parse(req.url);
+	
+	this.message.envelope.time = {
 		received: new Date().toISOString()
 	}
-	this.message = {
-		envelope: { },
-		body: { }
-	}
-}
 
-Event.prototype.envelope = function (key, value) {
-	this.message.envelope[key] = value;
-};
+}
 
 Event.prototype.toString = function () {
 	return JSON.stringify(this.message);
