@@ -1,5 +1,5 @@
 
 module.exports = function (message) {
-	console.log(message.toString());
+	console.log('message', message.toString());
 };
 
