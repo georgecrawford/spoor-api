@@ -1,19 +1,31 @@
 
-var Event = function (options) {
+var url = require('url');
 
-	this.options = options;
-	this.time = {
-		received: new Date().toISOString()
-	}
-	this.message = {
-		envelope: { },
-		body: { }
+var eventOwner = function (u) {
+	var owner = url.parse(u).pathname;
+	if (!!url.parse('').pathname) {
+		return { owner: a[0], eventType: a[1] }
+	} else {
+		return null;
 	}
 }
 
-Event.prototype.envelope = function (key, value) {
-	this.message.envelope[key] = value;
-};
+var Event = function (req) {
+
+	this.message = {
+		envelope: {
+			headers: req.headers || {}
+		},
+		message: req.payload || {}
+	}
+	
+	this.message.envelope.url = url.parse(req.url);
+	
+	this.message.envelope.time = {
+		received: new Date().toISOString()
+	}
+
+}
 
 Event.prototype.toString = function () {
 	return JSON.stringify(this.message);

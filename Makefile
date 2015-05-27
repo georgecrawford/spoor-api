@@ -12,3 +12,6 @@ run:
 	 export secretAccessKey=`cat ~/.aws-secret.spoor`; \
 	 export SQS_URL=`cat ~/.aws-sqs.spoor`; \
 	 node --harmony server.js
+
+test:
+	mocha -R spec tests/http
