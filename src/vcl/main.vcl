@@ -13,9 +13,6 @@ sub vcl_recv {
   set req.http.X-Geoip-City = geoip.city;
   set req.http.X-Geoip-Country-Name = geoip.country_name; 
 
-  if (!req.http.Fastly-SSL) {
-     error 801 "Force SSL";
-  }
   
      if (!req.http.Fastly-FF) {
        if (req.http.X-Forwarded-For) {
