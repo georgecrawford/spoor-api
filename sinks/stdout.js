@@ -1,5 +1,7 @@
 
+var util = require('util');
+
 module.exports = function (message) {
-	console.log('message', message.toString());
+	console.log(util.inspect(message, { depth: 7 }));
 };
 
