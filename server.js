@@ -1,6 +1,7 @@
 
-var http			= require('http');
 var response		= require('./lib/response');
+var express			= require('express');
+var bodyParser		= require('body-parser')
 
 // Metrics
 require('./lib/metrics/sqsAttributes');
@@ -8,12 +9,16 @@ require('./lib/metrics/cloudwatch');
 
 const PORT		= process.env.PORT || 5101; 
 
-var server = http.createServer(response);
+var app = express();
 
-server.on('clientError', function (err) {
-	console.log('CLIENT ERROR', err)
-})
+app.use(bodyParser.raw({ 
+	limit: '50kb',
+	type: 'application/json'
+}));
 
-server.listen(PORT, function(){
+app.get('/px.gif', require('./lib/response'));
+app.post('/px.gif', require('./lib/response'));
+
+app.listen(PORT, function() {
     console.log("Server listening on: http://localhost:%s", PORT);
 });

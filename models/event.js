@@ -7,9 +7,9 @@ var Event = function (req) {
 		envelope: {
 			headers: req.headers || {}
 		},
-		message: req.payload ? req.payload.toString() : {}
+		message: req.body ? req.body.toString() : {}
 	}
-	
+
 	this.message.envelope.url = url.parse(req.url);
 	
 	this.message.envelope.time = {
