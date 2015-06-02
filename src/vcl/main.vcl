@@ -1,10 +1,31 @@
-C!
-# Backends
+
+backend api {
+    .connect_timeout = 1s;
+    .dynamic = true;
+    .port = "80";
+    .host = "spoor-api.herokuapp.com";
+    .host_header = "spoor-api.herokuapp.com";
+    .first_byte_timeout = 15s;
+    .max_connections = 500;
+    .between_bytes_timeout = 10s;
+    .share_key = "2UZqZLWRfC73vSwyx0Hett";
+  
+      
+    .probe = {
+		.request = "HEAD /__gtg HTTP/1.1" "Host: spoor-api.herokuapp.com" "Connection: close" "User-Agent: Varnish/fastly (healthcheck)";
+        .window = 5;
+        .threshold = 2;
+        .timeout = 5s;
+        .initial = 5;
+        .dummy = true;
+      }
+}
 
 sub vcl_recv {
 
   # default conditions
-  set req.backend = F_addr_spoor_api_herokuapp_com;
+  set req.backend = api;
+  set req.http.Host = "spoor-api.herokuapp.com";
 
   set req.http.X-Geoip-Continent = geoip.continent_code;
   set req.http.X-Geoip-Country = geoip.country_code;
@@ -27,17 +48,14 @@ sub vcl_recv {
 
 
   set req.grace = 60s; 
-        
-
+    
+	# http://tech.vg.no/2014/01/13/varnish-requests-with-no-content-length-header/    
+	if ((req.request == "POST" || req.request == "PUT") &&
+		req.http.transfer-encoding ~ "chunked") {
+		return(pass);
+	}
   
   # end default conditions
-
-  
-
-      
-  
-
-
     if (req.request != "HEAD" && req.request != "GET" && req.request != "FASTLYPURGE") {
       return(pass);
     }
