@@ -13,12 +13,11 @@ var app = express();
 var px = new express.Router();
 
 px.use(bodyParser.raw({ limit: '50kb', type: 'application/json' }));
-//px.use(require('./lib/middleware/stats'));
+px.use(require('./lib/middleware/stats'));
 px.use(require('./lib/middleware/anonymous-uuid'));
 px.use('/',	require('./lib/middleware/response'));
 
 app.use('/px.gif', px);
-app.use('/px', px);
 
 // FIXME - handle errors, 404s etc.
 

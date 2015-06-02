@@ -22,7 +22,7 @@ describe('Spoor API', function () {
 	});
 	
 	it('Accept POST requests, respond with JSON', done => {
-		fetch('http://localhost:5101/px', { method: 'POST', headers: { 'content-type': 'application/json' } })
+		fetch('http://localhost:5101/px.gif', { method: 'POST', headers: { 'content-type': 'application/json' } })
 			.then(function (res) {
 				expect(res.status).to.equal(200);
 				expect(res.headers.get('content-type')).to.equal('application/json; charset=utf-8');
