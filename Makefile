@@ -1,5 +1,6 @@
 app := spoor-api
 HEROKU_AUTH_TOKEN := `heroku auth:token`
+.PHONY: build
 
 deploy:
     @haikro build deploy \
@@ -7,11 +8,15 @@ deploy:
         --heroku-token $(HEROKU_AUTH_TOKEN) \
         --commit `git rev-parse HEAD`
 
-run:
+compile:
+	gulp compile
+
+run: compile 
 	@export accessKey=`cat ~/.aws-access.spoor`; \
 	 export secretAccessKey=`cat ~/.aws-secret.spoor`; \
 	 export SQS_URL=`cat ~/.aws-sqs.spoor`; \
-	 node --harmony server.js
+	 node --harmony dist/api.js
 
 test:
-	mocha -R spec tests/http
+	@gulp compile-tests; mocha -R spec dist-tests/api
+

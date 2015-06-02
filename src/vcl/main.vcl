@@ -48,11 +48,15 @@ sub vcl_recv {
 
 
   set req.grace = 60s; 
-        
-
+    
+	# http://tech.vg.no/2014/01/13/varnish-requests-with-no-content-length-header/    
+	if ((req.request == "POST" || req.request == "PUT") &&
+		req.http.transfer-encoding ~ "chunked") {
+		return(pass);
+	}
   
   # end default conditions
-    if (req.request != "HEAD" && req.request != "GET" && req.request != "POST" && req.request != "FASTLYPURGE") {
+    if (req.request != "HEAD" && req.request != "GET" && req.request != "FASTLYPURGE") {
       return(pass);
     }
 
