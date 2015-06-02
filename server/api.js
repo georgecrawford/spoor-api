@@ -10,14 +10,15 @@ const PORT		= process.env.PORT || 5101;
 
 var app = express();
 
-var px = new express.Router();
+var ingest = new express.Router();
 
-px.use(bodyParser.raw({ limit: '50kb', type: 'application/json' }));
-px.use(require('./lib/middleware/stats'));
-px.use(require('./lib/middleware/anonymous-uuid'));
-px.use('/',	require('./lib/middleware/response'));
+ingest.use(bodyParser.raw({ limit: '50kb', type: 'application/json' }));
+ingest.use(require('./lib/middleware/stats'));
+ingest.use(require('./lib/middleware/anonymous-uuid'));
+ingest.use('/',	require('./lib/middleware/response'));
 
-app.use('/px.gif', px);
+app.use('/px.gif', ingest);
+app.use('/ingest', ingest);
 
 // FIXME - handle errors, 404s etc.
 
