@@ -1,1 +1,1 @@
-web: ./node_modules/.bin/forever -c "node --harmony" dist/api
+web: ./node_modules/.bin/forever -c "node --harmony" dist/api.js

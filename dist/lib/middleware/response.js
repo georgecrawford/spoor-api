@@ -8,12 +8,11 @@ var emitter = new EventEmitter();
 var gif = new Buffer('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64');
 
 // Things listening to the 'request' event
-/*
-emitter.on('request', sinks.stdout); 
-emitter.on('request', sinks.s3); 
-emitter.on('request', sinks.kinesis); 
-emitter.on('request', sinks.sqs); 
-*/
+
+emitter.on('request', sinks.stdout);
+emitter.on('request', sinks.s3);
+emitter.on('request', sinks.kinesis);
+emitter.on('request', sinks.sqs);
 
 // HTTP response
 module.exports = function (req, res, next) {
@@ -25,7 +24,7 @@ module.exports = function (req, res, next) {
 		req.body = new Buffer(req.query.data);
 	}
 
-	//emitter.emit('request', new Event(req));
+	emitter.emit('request', new Event(req));
 
 	// FIXME think about application/json responses
 	res.setHeader('Cache-Control', 'no-cache, max-age=0');
